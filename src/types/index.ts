@@ -82,3 +82,4 @@ export interface LoveLetter {
   isOpened: boolean;
   createdAt: number;
 }
+

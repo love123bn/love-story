@@ -141,3 +141,4 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({ isPlaying, setIsPlayin
     </>
   );
 };
+

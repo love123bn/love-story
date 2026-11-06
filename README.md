@@ -114,3 +114,4 @@ git push -u origin main
    };
    ```
 5. Mở trang web của bạn > Bấm vào biểu tượng **Cài Đặt (bánh răng)** > Chọn tab **Tài khoản Google & Cloud** > Dán các thông số vào và bấm Lưu. Cả hai bạn sẽ được đồng bộ dữ liệu vĩnh viễn!
+

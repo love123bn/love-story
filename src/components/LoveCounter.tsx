@@ -328,3 +328,4 @@ export const LoveCounter: React.FC<LoveCounterProps> = ({ couple, onEditCouple }
     </div>
   );
 };
+

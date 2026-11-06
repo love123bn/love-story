@@ -125,3 +125,4 @@ export const MILESTONE_INTERVALS = [
   { days: 1460, name: 'Tròn 4 Năm yêu nhau (4 Years Anniversary)', icon: '🌟' },
   { days: 1825, name: 'Tròn 5 Năm yêu nhau (Golden Half-Decade)', icon: '🏆' },
 ];
+

@@ -1,0 +1,21 @@
+{
+  "name": "Our Love Story - Đếm Ngày Yêu Nhau",
+  "short_name": "Our Love 💖",
+  "description": "Ứng dụng đếm ngày yêu nhau, nhật ký, chụp ảnh và nhắn tin lãng mạn dành riêng cho các cặp đôi",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff0f5",
+  "theme_color": "#f43f5e",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
