@@ -9,6 +9,8 @@ import { LoveChat } from './components/LoveChat';
 import { LoveLetters } from './components/LoveLetters';
 import { SettingsModal } from './components/SettingsModal';
 import { MusicPlayer } from './components/MusicPlayer';
+import { ShareModal } from './components/ShareModal';
+import { PasscodeLock } from './components/PasscodeLock';
 import { storageService } from './services/storage';
 import { firebaseService } from './services/firebase';
 import { CoupleData, DiaryEntry, PhotoMemory, ChatMessage, LoveLetter } from './types';
@@ -24,7 +26,11 @@ export function App() {
   const [letters, setLetters] = useState<LoveLetter[]>(() => storageService.getLetters());
   const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
   const [isCloudSynced, setIsCloudSynced] = useState<boolean>(false);
+  const [isLocked, setIsLocked] = useState<boolean>(() => {
+    return !!couple.passcode && sessionStorage.getItem('love_unlocked') !== 'true';
+  });
 
   // Compute total days together for header badge
   const daysTogether = React.useMemo(() => {
@@ -56,6 +62,19 @@ export function App() {
     return () => unsubAuth();
   }, [couple.googleUser]);
 
+  if (isLocked && couple.passcode) {
+    return (
+      <PasscodeLock
+        passcode={couple.passcode}
+        onSuccess={() => {
+          sessionStorage.setItem('love_unlocked', 'true');
+          setIsLocked(false);
+        }}
+        coupleNicknames={`${couple.boy.nickname} & ${couple.girl.nickname}`}
+      />
+    );
+  }
+
   return (
     <div className="relative min-h-screen flex flex-col bg-gradient-to-br from-[#fff0f5] via-[#fff5f7] to-[#fce4ec] selection:bg-pink-300 selection:text-pink-900 overflow-x-hidden font-['Quicksand']">
       
@@ -74,6 +93,7 @@ export function App() {
         toggleMusic={() => setIsMusicPlaying(!isMusicPlaying)}
         openSettings={() => setIsSettingsOpen(true)}
         openAuthModal={() => setIsSettingsOpen(true)}
+        openShare={() => setIsShareOpen(true)}
         isCloudSynced={isCloudSynced}
       />
 
@@ -138,6 +158,13 @@ export function App() {
         onClose={() => setIsSettingsOpen(false)}
         couple={couple}
         setCouple={setCouple}
+      />
+
+      {/* Share QR Code Modal */}
+      <ShareModal
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        couple={couple}
       />
 
       {/* Romantic Footer */}

@@ -10,7 +10,8 @@ import {
   Music, 
   UserCheck, 
   Cloud, 
-  Sparkles 
+  Sparkles,
+  Share2 
 } from 'lucide-react';
 import { CoupleData } from '../types';
 import { sound } from '../services/sound';
@@ -26,6 +27,7 @@ interface NavbarProps {
   toggleMusic: () => void;
   openSettings: () => void;
   openAuthModal: () => void;
+  openShare: () => void;
   isCloudSynced: boolean;
 }
 
@@ -40,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   toggleMusic,
   openSettings,
   openAuthModal,
+  openShare,
   isCloudSynced,
 }) => {
   const tabs = [
@@ -162,6 +165,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               {isMusicPlaying && (
                 <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
               )}
+            </button>
+
+            {/* Share QR Button */}
+            <button
+              onClick={openShare}
+              title="Chia sẻ link & mã QR cho người ấy"
+              className="p-2 rounded-full bg-pink-50 text-pink-700 border border-pink-200 hover:bg-pink-100 hover:scale-105 transition shadow-sm"
+            >
+              <Share2 className="w-4 h-4 text-rose-500" />
             </button>
 
             {/* Settings Button */}
