@@ -168,7 +168,17 @@ export const storageService = {
   getCoupleData(): CoupleData {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.COUPLE_DATA);
-      return data ? { ...DEFAULT_COUPLE, ...JSON.parse(data) } : DEFAULT_COUPLE;
+      if (!data) return DEFAULT_COUPLE;
+      const parsed = JSON.parse(data);
+      return {
+        ...DEFAULT_COUPLE,
+        ...parsed,
+        startDate: parsed?.startDate || DEFAULT_COUPLE.startDate,
+        startTime: parsed?.startTime || DEFAULT_COUPLE.startTime,
+        coupleCode: parsed?.coupleCode || DEFAULT_COUPLE.coupleCode,
+        boy: { ...DEFAULT_COUPLE.boy, ...(parsed?.boy || {}) },
+        girl: { ...DEFAULT_COUPLE.girl, ...(parsed?.girl || {}) },
+      };
     } catch {
       return DEFAULT_COUPLE;
     }

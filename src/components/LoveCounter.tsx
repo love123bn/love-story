@@ -35,9 +35,17 @@ export const LoveCounter: React.FC<LoveCounterProps> = ({ couple, onEditCouple }
 
   useEffect(() => {
     const calculateTime = () => {
-      const startDateTimeStr = `${couple.startDate}T${couple.startTime || '00:00'}:00`;
-      const start = new Date(startDateTimeStr).getTime();
-      const now = new Date().getTime();
+      const parts = (couple.startDate || '2023-10-20').split('-').map(Number);
+      const timeParts = (couple.startTime || '00:00').split(':').map(Number);
+      const startYear = parts[0] || 2023;
+      const startMonth = (parts[1] || 10) - 1;
+      const startDay = parts[2] || 20;
+      const startHour = timeParts[0] || 0;
+      const startMinute = timeParts[1] || 0;
+
+      const startDateObj = new Date(startYear, startMonth, startDay, startHour, startMinute);
+      const start = startDateObj.getTime();
+      const now = Date.now();
       const diffMs = Math.max(0, now - start);
 
       const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -45,7 +53,6 @@ export const LoveCounter: React.FC<LoveCounterProps> = ({ couple, onEditCouple }
       const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
       const seconds = Math.floor((diffMs / 1000) % 60);
 
-      const startDateObj = new Date(startDateTimeStr);
       const currentDateObj = new Date();
 
       let years = currentDateObj.getFullYear() - startDateObj.getFullYear();
@@ -63,13 +70,13 @@ export const LoveCounter: React.FC<LoveCounterProps> = ({ couple, onEditCouple }
       }
 
       setTimeDiff({
-        totalDays,
-        years: Math.max(0, years),
-        months: Math.max(0, months),
-        days: Math.max(0, days),
-        hours,
-        minutes,
-        seconds,
+        totalDays: isNaN(totalDays) ? 0 : totalDays,
+        years: Math.max(0, isNaN(years) ? 0 : years),
+        months: Math.max(0, isNaN(months) ? 0 : months),
+        days: Math.max(0, isNaN(days) ? 0 : days),
+        hours: isNaN(hours) ? 0 : hours,
+        minutes: isNaN(minutes) ? 0 : minutes,
+        seconds: isNaN(seconds) ? 0 : seconds,
       });
     };
 

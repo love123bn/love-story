@@ -55,6 +55,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const [startDate, setStartDate] = useState(couple.startDate);
   const [coupleCode, setCoupleCode] = useState(couple.coupleCode);
+  const [passcode, setPasscode] = useState(couple.passcode || '');
 
   // Custom Firebase fields
   const savedFbConfig = getSavedFirebaseConfig();
@@ -87,6 +88,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       ...couple,
       startDate,
       coupleCode: coupleCode.trim().toUpperCase(),
+      passcode: passcode.trim() || undefined,
       boy: {
         ...couple.boy,
         name: boyName.trim(),
@@ -304,6 +306,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                   <p className="text-[10px] text-gray-400 mt-1">
                     Gửi mã này cho nửa kia để cả hai cùng truy cập và trò chuyện chung!
+                  </p>
+                </div>
+
+                <div className="sm:col-span-2 pt-2 border-t border-pink-100">
+                  <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                    <span>🔒 Khóa mật khẩu bí mật (4 số - Tùy chọn)</span>
+                  </label>
+                  <input
+                    type="password"
+                    maxLength={4}
+                    placeholder="Để trống nếu không khóa (Ví dụ đặt: 1402, 2010)"
+                    value={passcode}
+                    onChange={(e) => setPasscode(e.target.value.replace(/\D/g, ''))}
+                    className="w-full mt-1 px-3 py-2 rounded-xl border border-pink-200 text-sm font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white"
+                  />
+                  <p className="text-[10px] text-gray-500 mt-1">
+                    Khi cài mã, người lạ mở web phải nhập đúng 4 số mới xem được nhật ký và ảnh riêng tư.
                   </p>
                 </div>
               </div>

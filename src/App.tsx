@@ -28,9 +28,12 @@ export function App() {
 
   // Compute total days together for header badge
   const daysTogether = React.useMemo(() => {
-    const start = new Date(`${couple.startDate}T${couple.startTime || '00:00'}:00`).getTime();
+    const parts = (couple.startDate || '2023-10-20').split('-').map(Number);
+    const timeParts = (couple.startTime || '00:00').split(':').map(Number);
+    const start = new Date(parts[0] || 2023, (parts[1] || 10) - 1, parts[2] || 20, timeParts[0] || 0, timeParts[1] || 0).getTime();
     const now = Date.now();
-    return Math.max(0, Math.floor((now - start) / (1000 * 60 * 60 * 24)));
+    const diff = Math.max(0, Math.floor((now - start) / (1000 * 60 * 60 * 24)));
+    return isNaN(diff) ? 0 : diff;
   }, [couple.startDate, couple.startTime]);
 
   // Handle active role switch

@@ -118,17 +118,28 @@ export const ValentineCalendar: React.FC<ValentineCalendarProps> = ({ couple }) 
     });
 
     // 2. Process Milestones
-    const startDate = new Date(couple.startDate);
+    const parseSafeDate = (dStr: string) => {
+      const parts = (dStr || '2023-10-20').split('-').map(Number);
+      if (parts.length === 3 && parts[0] && parts[1] && parts[2]) {
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+      }
+      return new Date(2023, 9, 20);
+    };
+
+    const startDate = parseSafeDate(couple.startDate);
     const milestones = MILESTONE_INTERVALS.map((m, index) => {
       const targetDate = new Date(startDate.getTime() + m.days * 24 * 60 * 60 * 1000);
       const diffMs = targetDate.getTime() - todayTimestamp;
       const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      const y = targetDate.getFullYear();
+      const mo = String(targetDate.getMonth() + 1).padStart(2, '0');
+      const da = String(targetDate.getDate()).padStart(2, '0');
 
       return {
         id: `milestone-${index}`,
         name: m.name,
-        date: targetDate.toISOString().split('T')[0],
-        computedDateStr: `${targetDate.getDate()}/${targetDate.getMonth() + 1}/${targetDate.getFullYear()}`,
+        date: `${y}-${mo}-${da}`,
+        computedDateStr: `${da}/${mo}/${y}`,
         meaning: `Cột mốc thiêng liêng: ${m.days} ngày tình yêu được vun đắp từ những điều nhỏ bé nhất.`,
         activity: 'Tổ chức tiệc nhỏ kỷ niệm, ôn lại những bức ảnh và kỷ niệm đã qua!',
         category: 'milestone' as const,
@@ -141,17 +152,19 @@ export const ValentineCalendar: React.FC<ValentineCalendarProps> = ({ couple }) 
 
     // 3. Process Custom holidays
     const customs = customList.map((c) => {
-      const parts = c.date.split('-');
-      let targetDate = new Date(currentYear, Number(parts[1]) - 1, Number(parts[2]));
+      const parts = (c.date || '').split('-');
+      const mNum = Number(parts[1]) || 1;
+      const dNum = Number(parts[2]) || 1;
+      let targetDate = new Date(currentYear, mNum - 1, dNum);
       if (targetDate.getTime() < todayTimestamp) {
-        targetDate = new Date(currentYear + 1, Number(parts[1]) - 1, Number(parts[2]));
+        targetDate = new Date(currentYear + 1, mNum - 1, dNum);
       }
       const diffMs = targetDate.getTime() - todayTimestamp;
       const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
       return {
         ...c,
-        computedDateStr: `${parts[2]}/${parts[1]}`,
+        computedDateStr: `${String(dNum).padStart(2, '0')}/${String(mNum).padStart(2, '0')}`,
         activity: 'Dành trọn thời gian bên nhau trong ngày đặc biệt này!',
         targetDate,
         daysLeft,
