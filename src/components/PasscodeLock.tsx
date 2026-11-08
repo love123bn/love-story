@@ -124,3 +124,4 @@ export const PasscodeLock: React.FC<PasscodeLockProps> = ({
     </div>
   );
 };
+
